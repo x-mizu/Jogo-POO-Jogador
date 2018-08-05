@@ -1,23 +1,23 @@
 package Model;
 
-import jogo.Jogador;
-
 public class Jogador {
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// jogador eu peguei do Nelson, so acrescentei algumas variaveis, talvez ate desnecessariamente
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public Long id;
+	public String nickname;
+	public String corAvatar;
+	public Jogador alvo;
+	public boolean vida;
+	public boolean protecao;
+	public boolean acaoValida;
+	public int acao;
+	public int balas;
 
-	{
-	    String ID;
-	    Jogador alvo;
-	    boolean vida;
-	    boolean protecao;
-	    boolean acaoValida;
-	    int acao;
-	    boolean balas;
-
-	public Jogador(String nome) {
-		this.ID = nome;
+	public Jogador() {
 		this.vida = true;
 		this.protecao = false;
-		this.balas = false;
+		this.balas = 0;
 		this.acao = 0;
 		this.acaoValida = false;
 	}
@@ -27,13 +27,14 @@ public class Jogador {
 	}
 
 	public void carregar() {
-		this.balas = true;
+		this.balas = 1;
 	}
 
 	public void atirar(Jogador atirador, Jogador alvo) {
-		atirador.balas = false;
+		atirador.balas = 0;
 		if (!alvo.protecao) {
 			alvo.vida = false;
 		}
 	}
+
 }
