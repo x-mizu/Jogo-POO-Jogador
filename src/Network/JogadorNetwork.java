@@ -1,11 +1,19 @@
 package Network;
 
+import Model.Requisicao;
+import Model.Resposta;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+
 
 public class JogadorNetwork {
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -17,26 +25,42 @@ public class JogadorNetwork {
 	private DataOutputStream serverWriter = null;
 	private InputStreamReader is = null;
 	private BufferedReader serverReader;
-
-	
+        private ObjectInputStream in = null;
+	private ObjectOutputStream out = null;
+        
+        
 	public void conectarComServidor() throws IOException {
 		clientSocket = new Socket("127.0.0.1", 9000);
 		
 		int port = clientSocket.getLocalPort();
 		System.out.println("------------------\n"+ "Porta: " + port);
 		
-	    os = new PrintStream(clientSocket.getOutputStream());
-	    serverWriter = new DataOutputStream(os);
-	    is = new InputStreamReader(clientSocket.getInputStream());
-	    serverReader = new BufferedReader(is);
+                out = new ObjectOutputStream(clientSocket.getOutputStream());
+                in = new ObjectInputStream(clientSocket.getInputStream());
 	}
 	
-	
-	public void mandarMensagem(String mensagem) throws IOException{
-		serverWriter.writeBytes(mensagem+"\n");
-	}
-	
-	public String receberMensagem() throws IOException {
-		return serverReader.readLine();
-	}
+        //              RECEBE UM OBJETO DO TIPO REQUISCAO E ENVIA          //
+        public void enviarReq(Requisicao req)
+        {
+            try {
+                out.writeObject(req);
+            } catch (IOException ex) {
+                Logger.getLogger(JogadorNetwork.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        
+        //          RECEBE UM OBJETO DO TIPO RESPOSTA               //
+        public Resposta receberResp() 
+        {
+           Resposta resposta = new Resposta(); 
+            try {
+                resposta = (Resposta)in.readObject();
+            } catch (IOException ex) {
+                Logger.getLogger(JogadorNetwork.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(JogadorNetwork.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            return resposta;
+        }
 }
