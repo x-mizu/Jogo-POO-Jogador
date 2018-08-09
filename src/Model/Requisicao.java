@@ -9,5 +9,5 @@ public class Requisicao implements java.io.Serializable {
 	public String jogadorNickname;
 	public String jogadorCorAvatar;
 	public Long jogadorIdAlvo;
-		
+        		
 }
