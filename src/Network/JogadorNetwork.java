@@ -13,8 +13,6 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-
 public class JogadorNetwork {
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// nao mudei nada aqui, so o nome mesmo
@@ -25,42 +23,37 @@ public class JogadorNetwork {
 	private DataOutputStream serverWriter = null;
 	private InputStreamReader is = null;
 	private BufferedReader serverReader;
-        private ObjectInputStream in = null;
+	private ObjectInputStream in = null;
 	private ObjectOutputStream out = null;
-        
-        
+
 	public void conectarComServidor() throws IOException {
 		clientSocket = new Socket("127.0.0.1", 9000);
-		
+
 		int port = clientSocket.getLocalPort();
-		System.out.println("------------------\n"+ "Porta: " + port);
-		
-                out = new ObjectOutputStream(clientSocket.getOutputStream());
-                in = new ObjectInputStream(clientSocket.getInputStream());
+		System.out.println("------------------\n" + "Porta: " + port);
+
+		out = new ObjectOutputStream(clientSocket.getOutputStream());
+		in = new ObjectInputStream(clientSocket.getInputStream());
 	}
-	
-        //              RECEBE UM OBJETO DO TIPO REQUISCAO E ENVIA          //
-        public void enviarReq(Requisicao req)
-        {
-            try {
-                out.writeObject(req);
-            } catch (IOException ex) {
-                Logger.getLogger(JogadorNetwork.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
-        
-        //          RECEBE UM OBJETO DO TIPO RESPOSTA               //
-        public Resposta receberResp() 
-        {
-           Resposta resposta = new Resposta(); 
-            try {
-                resposta = (Resposta)in.readObject();
-            } catch (IOException ex) {
-                Logger.getLogger(JogadorNetwork.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(JogadorNetwork.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            return resposta;
-        }
+
+	// RECEBE UM OBJETO DO TIPO REQUISCAO E ENVIA //
+	public void enviarReq(Requisicao req) {
+		try {
+			out.writeObject(req);
+		} catch (IOException ex) {
+			Logger.getLogger(JogadorNetwork.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
+
+	// RECEBE UM OBJETO DO TIPO RESPOSTA //
+	public Resposta receberResp() {
+		try {
+			return (Resposta) in.readObject();
+		} catch (IOException ex) {
+			Logger.getLogger(JogadorNetwork.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (ClassNotFoundException ex) {
+			Logger.getLogger(JogadorNetwork.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		return null;
+	}
 }

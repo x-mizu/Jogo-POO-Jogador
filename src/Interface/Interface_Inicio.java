@@ -62,7 +62,7 @@ public class Interface_Inicio {
 	private void initialize() {
 		//formato da tela
 		frame = new JFrame();
-		frame.setBounds(100, 100, 500, 400);
+		frame.setBounds(100, 100, 500, 250);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,21 +98,6 @@ public class Interface_Inicio {
 				}
 			}
 		});
-		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		
-		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//selecao de servidor
-		JLabel lblStatus = new JLabel("Status:");
-
-		JLabel lblOnline = new JLabel("Em Espera");
-		lblOnline.setForeground(new Color(0, 0, 255));
-
-		JLabel lblQtdDePessoas = new JLabel("Qtd. de pessoas:");
-
-		JLabel MaximoJogadores = new JLabel("/ 5");
-
-		JLabel JogadoresNaSala = new JLabel("0");
-		JogadoresNaSala.setForeground(new Color(0, 128, 0));
 		
 		JLabel lblServidor = new JLabel("Servidor:");
 		JComboBox comboBox_1 = new JComboBox(servidores);
@@ -128,54 +113,9 @@ public class Interface_Inicio {
 					
 					try { 
 						Resposta resp = listaRespostas.take();
-						Long serverStatus = resp.serverStatus;
-						if (serverStatus == 9) {
-							lblOnline.setText("Em Espera");
-							lblOnline.setForeground(new Color(0, 0, 255));
-						}
-						else if (serverStatus == 8) {
-							lblOnline.setText("Cheio");
-							lblOnline.setForeground(new Color(255, 0, 0));	
-						}
-						else if (serverStatus == 7) {
-							lblOnline.setText("Em Jogo");
-							lblOnline.setForeground(new Color(0, 255, 0));	
-						}
-						
-						JogadoresNaSala.setText(String.valueOf(resp.qtdJogadores));
-						
+					
 					} catch (InterruptedException e) {e.printStackTrace();}
 				}
-			}
-		});
-
-		JButton btnVerificarStatusDo = new JButton("Atualizar Status do Servidor");
-		btnVerificarStatusDo.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				Requisicao req = new Requisicao();
-				req.servidorId = serverId;
-				req.acao = Long.valueOf(8);
-				listaRequisicoes.add(req);
-				
-				try { 
-					Resposta resp = listaRespostas.take();
-					Long serverStatus = resp.serverStatus;
-					if (serverStatus == 9) {
-						lblOnline.setText("Em Espera");
-						lblOnline.setForeground(new Color(0, 0, 255));
-					}
-					else if (serverStatus == 8) {
-						lblOnline.setText("Cheio");
-						lblOnline.setForeground(new Color(255, 0, 0));	
-					}
-					else if (serverStatus == 7) {
-						lblOnline.setText("Em Jogo");
-						lblOnline.setForeground(new Color(0, 255, 0));	
-					}
-					
-					JogadoresNaSala.setText(String.valueOf(resp.qtdJogadores));
-					
-				} catch (InterruptedException e) {e.printStackTrace();}
 			}
 		});
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -200,9 +140,6 @@ public class Interface_Inicio {
 						frame.dispose();
 					}
 				
-					
-					JogadoresNaSala.setText(String.valueOf(resp.qtdJogadores));
-					
 				} catch (Exception ie) {ie.printStackTrace();}
 			}
 		});
@@ -212,9 +149,9 @@ public class Interface_Inicio {
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(10)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
 						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(10)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 								.addGroup(groupLayout.createSequentialGroup()
 									.addComponent(lblNickname)
@@ -227,21 +164,12 @@ public class Interface_Inicio {
 								.addGroup(groupLayout.createSequentialGroup()
 									.addComponent(lblServidor)
 									.addGap(114)
-									.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addComponent(btnVerificarStatusDo)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(lblStatus)
-									.addGap(82)
-									.addComponent(lblOnline))
-								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(lblQtdDePessoas)
-									.addGap(59)
-									.addComponent(JogadoresNaSala)
-									.addGap(6)
-									.addComponent(MaximoJogadores)))
-							.addGap(30)
-							.addComponent(Avatar_Label, GroupLayout.PREFERRED_SIZE, 175, Short.MAX_VALUE))
-						.addComponent(btnEntrarNoServidor, GroupLayout.PREFERRED_SIZE, 167, GroupLayout.PREFERRED_SIZE))
+									.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(btnEntrarNoServidor, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+					.addGap(30)
+					.addComponent(Avatar_Label, GroupLayout.PREFERRED_SIZE, 175, Short.MAX_VALUE)
 					.addGap(37))
 		);
 		groupLayout.setVerticalGroup(
@@ -267,21 +195,10 @@ public class Interface_Inicio {
 									.addGap(3)
 									.addComponent(lblServidor))
 								.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addComponent(btnVerificarStatusDo)
-							.addGap(6)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblStatus)
-								.addComponent(lblOnline))
-							.addGap(6)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblQtdDePessoas)
-								.addComponent(JogadoresNaSala)
-								.addComponent(MaximoJogadores)))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(btnEntrarNoServidor))
 						.addComponent(Avatar_Label, GroupLayout.PREFERRED_SIZE, 175, Short.MAX_VALUE))
-					.addGap(34)
-					.addComponent(btnEntrarNoServidor)
-					.addGap(118))
+					.addGap(175))
 		);
 		frame.getContentPane().setLayout(groupLayout);
 

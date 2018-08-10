@@ -40,10 +40,24 @@ public class JogadorPrincipal {
                 System.out.println(teste.serverStatus);
                 listaRespostas.add(teste);
                 
-                abrirTelaJogo(listaRequisicoes, listaRespostas, resp);
+                abrirTelaJogo(listaRequisicoes, listaRespostas, teste);
                 Requisicao req2 = listaRequisicoes.take();
-                js.enviarReq(req1);
-                listaRespostas.add(js.receberResp());
+                System.out.println(req2.acao);
+                js.enviarReq(req2);
+                
+                Resposta teste2 = new Resposta();
+                teste2 = js.receberResp();
+                System.out.println("ID - " + teste2.jogadorId);
+                for (int k = 0; k < teste2.jogadores[0].length; k++) {
+        			for (int o = 0; o < teste2.jogadores[0].length; o++)
+        				System.out.print(teste2.jogadores[k][o]+" ");
+        			
+        			System.out.println("");
+        		}
+        		System.out.println("-------------------------------\n");
+        		
+        		
+                listaRespostas.add(teste2);
                 
 
             }//fim do loop

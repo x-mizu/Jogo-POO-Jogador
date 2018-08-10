@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import Model.Avatar;
+import Model.Jogador;
 import Model.Requisicao;
 import Model.Resposta;
 
@@ -39,9 +40,9 @@ public class Interface_Jogo {
 		this.listaRequisicoes = listaReq;
 		this.listaRespostas = listaRes;
 
-		this.adversarios = buscarAdversarios(respIni.jogadores, respIni.jogadorId);
-		
 		this.req = new Requisicao();
+		
+		this.adversarios = buscarAdversarios(respIni.jogadores, respIni.jogadorId);
 		this.req.servidorId = respIni.servidorId;
 		this.req.jogadorId = respIni.jogadorId;
 
@@ -252,12 +253,48 @@ public class Interface_Jogo {
 			public void actionPerformed(ActionEvent arg0) {
 				while (inicioPartida) {
 					req.acao = Long.valueOf(7);
+					req.jogadorId = req.jogadorId;
+					
+					
 					listaRequisicoes.add(req);
 					
 					try { 
 						Resposta resp = listaRespostas.take();
-						if (resp.serverStatus == 7)
+						if (resp.serverStatus == 7) {
+							adversarios = buscarAdversarios(resp.jogadores, resp.jogadorId); //atualiza matriz de adversarios
+							
+							//atualia as imagens
+							try {
+								ImageIcon img1 = new ImageIcon(ImageIO.read(Interface_Inicio.class.getResourceAsStream(
+										Avatar.getCaminhoImg(adversarios[2][0], (int) Long.parseLong(adversarios[3][0])))));
+								System.out.println(adversarios[1][0]);
+								lblPlayer1.setIcon(img1);
+
+								ImageIcon img2 = new ImageIcon(ImageIO.read(Interface_Inicio.class.getResourceAsStream(
+										Avatar.getCaminhoImg(adversarios[2][1], (int) Long.parseLong(adversarios[3][1])))));
+								System.out.println(adversarios[1][1]);
+								lblPlayer2.setIcon(img2);
+
+								ImageIcon img3 = new ImageIcon(ImageIO.read(Interface_Inicio.class.getResourceAsStream(
+										Avatar.getCaminhoImg(adversarios[2][2], (int) Long.parseLong(adversarios[3][2])))));
+								System.out.println(adversarios[1][2]);
+								lblPlayer3.setIcon(img3);
+
+								ImageIcon img4 = new ImageIcon(ImageIO.read(Interface_Inicio.class.getResourceAsStream(
+										Avatar.getCaminhoImg(adversarios[2][3], (int) Long.parseLong(adversarios[3][3])))));
+								System.out.println(adversarios[1][3]);
+								lblPlayer4.setIcon(img4);
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+							//atualuza textos de nome de adversarios
+							lblP1.setText(adversarios[1][0]);
+							lblP2.setText(adversarios[1][1]);
+							lblP3.setText(adversarios[1][2]);
+							lblP4.setText(adversarios[1][3]);
+							
 							inicioPartida = false;
+						}
 						
 					} catch (InterruptedException e) {e.printStackTrace();}
 				}
@@ -362,13 +399,21 @@ public class Interface_Jogo {
 		int j = 0;
 		for (int i = 0; i < jogadores[0].length; i++) {
 
-			if (Long.parseLong(jogadores[0][i]) != jogadorId) {
+			if (!jogadores[0][i].equals(String.valueOf(jogadorId))) {
 				adversarios[0][j] = jogadores[0][i];
 				adversarios[1][j] = jogadores[1][i];
 				adversarios[2][j] = jogadores[2][i];
-				adversarios[3][j] = jogadores[3][i];
 				adversarios[4][j] = jogadores[4][i];
+				if (Long.parseLong(jogadores[3][i]) > Long.valueOf("3"))
+					adversarios[3][j] = "0";
+				else
+					adversarios[3][j] = jogadores[3][i];
 				j++;
+			}
+			else {
+				req.jogadorNickname = jogadores[1][i];
+				req.jogadorCorAvatar = jogadores[2][i];
+						
 			}
 		}
 
