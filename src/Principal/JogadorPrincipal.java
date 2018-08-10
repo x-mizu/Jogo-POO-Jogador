@@ -28,9 +28,10 @@ public class JogadorPrincipal {
             abrirTelaInicio(listaRequisicoes, listaRespostas);
 
             try {//TODO fazer um loop para quando a requisicao seja so para verificar o status do server
-                js.conectarComServidor();
+                
                 Requisicao req1 = listaRequisicoes.take();
-                System.out.println(req1.jogadorNickname);
+                js.conectarComServidor(8999 + (int)(long)req1.servidorId);
+                
                 js.enviarReq(req1);
                 //cria uma resposta teste ***para uma resposta de tipo "1", ou seja, de sucesso ao entrar na sala. O servidor deve retornar a matriz de jogadores ja incluso o jogador que entrou na sala
                 // ATENCAO, AO APERTAR EM ATUALIZAR STATUS DO SERVIDOR, DA RUIM POIS ESTA RESPOSTA NAO E RESPOSTA PARA ESSE TIPO DE REQUISICAO
@@ -47,15 +48,6 @@ public class JogadorPrincipal {
                 
                 Resposta teste2 = new Resposta();
                 teste2 = js.receberResp();
-                System.out.println("ID - " + teste2.jogadorId);
-                for (int k = 0; k < teste2.jogadores[0].length; k++) {
-        			for (int o = 0; o < teste2.jogadores[0].length; o++)
-        				System.out.print(teste2.jogadores[k][o]+" ");
-        			
-        			System.out.println("");
-        		}
-        		System.out.println("-------------------------------\n");
-        		
         		
                 listaRespostas.add(teste2);
                 
